@@ -1,4 +1,4 @@
-package org.goitaca.event;
+package goitaca.event;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

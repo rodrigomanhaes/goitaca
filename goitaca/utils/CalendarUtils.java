@@ -1,6 +1,16 @@
-package org.goitaca.utils;
+package goitaca.utils;
 
+import static java.util.Calendar.DATE;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class CalendarUtils
@@ -10,13 +20,13 @@ public class CalendarUtils
         try
         {
             return CalendarUtils.leftPad(String.valueOf(calendar
-                    .get(Calendar.DAY_OF_MONTH)), 2, "0")
+                    .get(DAY_OF_MONTH)), 2, "0")
                     + "/"
                     + CalendarUtils.leftPad(String.valueOf(calendar
-                            .get(Calendar.MONTH) + 1), 2, "0")
+                            .get(MONTH) + 1), 2, "0")
                     + "/"
                     + CalendarUtils.leftPad(String.valueOf(calendar
-                            .get(Calendar.YEAR)), 4, "0");
+                            .get(YEAR)), 4, "0");
         }
         catch (Exception e)
         {
@@ -32,7 +42,7 @@ public class CalendarUtils
     {
         try
         {
-            return portugueseMonths[calendar.get(Calendar.MONTH)];
+            return portugueseMonths[calendar.get(MONTH)];
         }
         catch (Exception e)
         {
@@ -69,9 +79,9 @@ public class CalendarUtils
             return null;
         }
 
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.MONTH, month - 1);
-        calendar.set(Calendar.YEAR, year);
+        calendar.set(DAY_OF_MONTH, day);
+        calendar.set(MONTH, month - 1);
+        calendar.set(YEAR, year);
         return calendar;
     }
     
@@ -114,18 +124,18 @@ public class CalendarUtils
         Calendar calendar = new GregorianCalendar();
         
         //Informando o ano da data
-        calendar.set(Calendar.YEAR, year);
+        calendar.set(YEAR, year);
         
         //verifica se o mês é um mês valido (entre 0 e 11)
         if (month > 11) 
             return false;
         
         //Informa o mês da data
-        calendar.set(Calendar.MONTH, month);
+        calendar.set(MONTH, month);
         
         //Testa se os dias correspondem ao número de dias do mês
         
-        if (day > calendar.getActualMaximum(Calendar.DATE)) 
+        if (day > calendar.getActualMaximum(DATE)) 
             return false;
     
         return true;
@@ -160,5 +170,58 @@ public class CalendarUtils
         Calendar calendar = new GregorianCalendar();
         calendar.setTimeInMillis(date.getTime());
         return calendar;
+    }
+    
+    public static Date putDate(Date source, Date target)
+    {
+        if (target == null)
+        	target = new Date();
+    	Calendar dataHoraCalendar = new GregorianCalendar();
+        Calendar dataCalendar = new GregorianCalendar();
+        
+        dataHoraCalendar.setTime(target);
+        dataCalendar.setTime(source);
+        
+        dataHoraCalendar.set(DAY_OF_MONTH, dataCalendar.get(DAY_OF_MONTH));
+        dataHoraCalendar.set(MONTH, dataCalendar.get(MONTH));
+        dataHoraCalendar.set(YEAR, dataCalendar.get(YEAR));
+        
+        return dataHoraCalendar.getTime();
+    }
+    
+    public static Date putTime(String source, Date target)
+    {
+    	if (target == null)
+    		target = new Date();
+    	Calendar dataHoraCalendar = new GregorianCalendar();
+        Calendar horaCalendar = new GregorianCalendar();
+        
+        Date horaNova = null;
+        
+        try
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
+            horaNova = sdf.parse(source);
+        }
+        catch (ParseException e)
+        {
+            throw new IllegalArgumentException(e);
+        }
+        
+        dataHoraCalendar.setTime(target);
+        horaCalendar.setTime(horaNova);
+        
+        dataHoraCalendar.set(HOUR_OF_DAY, horaCalendar.get(HOUR_OF_DAY));
+        dataHoraCalendar.set(MINUTE, horaCalendar.get(MINUTE));
+        
+        return dataHoraCalendar.getTime();
+    }
+    
+    public static Date add(Date date, int numDays)
+    {
+    	Calendar calendar = new GregorianCalendar();
+    	calendar.setTimeInMillis(date.getTime());
+    	calendar.add(DATE, numDays);
+    	return calendar.getTime();
     }
 }

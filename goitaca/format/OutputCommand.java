@@ -1,4 +1,4 @@
-package org.goitaca.format;
+package goitaca.format;
 
 public abstract class OutputCommand
 {

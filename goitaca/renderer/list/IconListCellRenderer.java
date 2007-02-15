@@ -1,4 +1,4 @@
-package org.goitaca.renderer;
+package goitaca.renderer.list;
 
 import java.awt.Component;
 

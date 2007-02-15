@@ -1,4 +1,4 @@
-package org.goitaca.model;
+package goitaca.model;
 
 import javax.swing.DefaultListModel;
 

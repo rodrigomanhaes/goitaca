@@ -1,4 +1,4 @@
-package org.goitaca.action;
+package goitaca.action;
 
 import java.util.HashMap;
 import java.util.Map;

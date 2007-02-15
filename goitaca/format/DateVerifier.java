@@ -1,10 +1,11 @@
-package org.goitaca.format;
+package goitaca.format;
+
+import goitaca.utils.CalendarUtils;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
-import org.goitaca.utils.CalendarUtils;
 
 public class DateVerifier extends VerifierDecorator
 {

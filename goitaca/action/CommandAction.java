@@ -1,5 +1,7 @@
-package org.goitaca.action;
+package goitaca.action;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +20,24 @@ import javax.swing.KeyStroke;
  * @version 1.0 RC1
  * @since 1.0
  */
-public abstract class CommandAction extends AbstractAction
+public class CommandAction extends AbstractAction
 {
-    /**
+	private static final long serialVersionUID = 676182495685424116L;
+
+	private List<ActionListener> listeners; 
+	
+	public CommandAction()
+	{
+		listeners = new ArrayList<ActionListener>();
+	}
+	
+	public CommandAction addActionListener(ActionListener listener)
+	{
+		listeners.add(listener);
+		return this;
+	}
+	
+	/**
      * Cria um CommandAction especificando nome, &iacute;cone, acelerador, mnem&ocirc;nico e tooltip.
      * 
      * @param name nome da a&ccedil;&atilde;o
@@ -43,7 +60,7 @@ public abstract class CommandAction extends AbstractAction
         if (toolTip != null)
             this.putValue(Action.SHORT_DESCRIPTION, toolTip);
         
-        listeners = new ArrayList<CommandActionListener>();
+        commandListeners = new ArrayList<CommandActionListener>();
 	}
 	
 	private boolean enabled = true;
@@ -84,24 +101,30 @@ public abstract class CommandAction extends AbstractAction
 		this.visible = visible;
 	}
 	
-	private List<CommandActionListener> listeners;
+	private List<CommandActionListener> commandListeners;
 	
 	public void addCommandActionListener(CommandActionListener listener)
 	{
-		listeners.add(listener);
+		commandListeners.add(listener);
 	}
 	
 	public void removeCommandActionListener(CommandActionListener listener)
 	{
-		listeners.remove(listener);
+		commandListeners.remove(listener);
 	}
 	
 	protected void notifyListeners(Object source, boolean success, Object cargo)
 	{
-		for (CommandActionListener listener: listeners)
+		for (CommandActionListener listener: commandListeners)
 		{
 			CommandActionEvent event = new CommandActionEvent(source, success, cargo);
 			listener.actionExecuted(event);
 		}
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		for (ActionListener listener: listeners)
+			listener.actionPerformed(e);
 	}
 }

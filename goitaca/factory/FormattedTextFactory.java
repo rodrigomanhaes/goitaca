@@ -1,4 +1,17 @@
-package org.goitaca.factory;
+package goitaca.factory;
+
+import goitaca.format.CNPJVerifier;
+import goitaca.format.CPFVerifier;
+import goitaca.format.CapitalizeVerifier;
+import goitaca.format.DateVerifier;
+import goitaca.format.EMailVerifier;
+import goitaca.format.LetterVerifier;
+import goitaca.format.LowerVerifier;
+import goitaca.format.MuteFormattedTextField;
+import goitaca.format.NumberVerifier;
+import goitaca.format.OptionPaneOutputCommand;
+import goitaca.format.OutputCommand;
+import goitaca.format.UpperVerifier;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -8,18 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
-import org.goitaca.format.CNPJVerifier;
-import org.goitaca.format.CPFVerifier;
-import org.goitaca.format.CapitalizeVerifier;
-import org.goitaca.format.DateVerifier;
-import org.goitaca.format.EMailVerifier;
-import org.goitaca.format.MuteFormattedTextField;
-import org.goitaca.format.LetterVerifier;
-import org.goitaca.format.LowerVerifier;
-import org.goitaca.format.NumberVerifier;
-import org.goitaca.format.OptionPaneOutputCommand;
-import org.goitaca.format.OutputCommand;
-import org.goitaca.format.UpperVerifier;
 
 public class FormattedTextFactory
 {

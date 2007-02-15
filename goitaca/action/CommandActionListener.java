@@ -1,4 +1,4 @@
-package org.goitaca.action;
+package goitaca.action;
 
 public interface CommandActionListener 
 {

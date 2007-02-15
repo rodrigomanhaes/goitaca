@@ -1,4 +1,4 @@
-package org.goitaca.factory;
+package goitaca.factory;
 
 import java.awt.Component;
 import java.awt.Dimension;

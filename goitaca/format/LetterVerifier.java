@@ -1,4 +1,4 @@
-package org.goitaca.format;
+package goitaca.format;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;

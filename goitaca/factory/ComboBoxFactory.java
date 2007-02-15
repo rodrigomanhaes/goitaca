@@ -1,4 +1,4 @@
-package org.goitaca.factory;
+package goitaca.factory;
 
 import javax.swing.JComboBox;
 

@@ -1,4 +1,4 @@
-package org.goitaca.utils;
+package goitaca.utils;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -6,9 +6,11 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -20,7 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.event.MouseInputAdapter;
 
 public class SwingUtils
 {
@@ -85,7 +89,7 @@ public class SwingUtils
         gbc.weightx = 0;
         gbc.weighty = 0;
         if (insets != null)
-            gbc.insets = insets;
+            gbc.insets = new Insets(insets.top, insets.left, insets.bottom, 3);
         container.add(label, gbc);
 
         gbc.gridx += labelWidth;
@@ -93,7 +97,9 @@ public class SwingUtils
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = fill;
         gbc.weightx = weightx;
-        gbc.weighty = weighty;        
+        gbc.weighty = weighty;
+        if (insets != null)
+            gbc.insets = insets;
         container.add(textField, gbc);
     }
     
@@ -214,12 +220,12 @@ public class SwingUtils
             gridy, labelWidth, textFieldWidth, gridHeight, fill);        
     }
 
-    public static void centralize(Component component)
+    public static Point centerLocation(Component component)
     {
-        component.setLocation(
-    		Toolkit.getDefaultToolkit().getScreenSize().width / 2 - 
-    		component.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 
-			component.getHeight() / 2);
+        return new Point((int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - 
+    		component.getWidth() / 2), (int) Math.round(
+			Toolkit.getDefaultToolkit().getScreenSize().getHeight()/ 2 - 
+			component.getHeight() / 2));
     }
 
     /**
@@ -274,18 +280,14 @@ public class SwingUtils
     /* JOptionPane YesNo */
     public static int yesNoPane(String title, String message)
     {
-        return yesNoPane(title, message, 0, "Sim", "Não");
-    }
-    
-    public static int yesNoPane(String title, String message,
-        Integer botaoDefault)
-    {
-    	return yesNoPane(title, message, botaoDefault, "Sim", "Não");
+        return yesNoPane(title, message, 0);
     }
 
     public static int yesNoPane(String title, String message,
-        Integer botaoDefault, Object... options)
+            Integer botaoDefault)
     {
+        Object[] options = { "Sim", "Não" };
+
         int retorno = JOptionPane.showOptionDialog(null, message, title,
             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
             options, options[botaoDefault]);
@@ -301,10 +303,7 @@ public class SwingUtils
     public static int yesNoCancelPane(String title, String message,
             Integer botaoDefault)
     {
-        Object[] options = 
-        { 
-    		"Sim","Não","Cancelar"
-		};
+        Object[] options = { "Sim", "Não", "Cancela" };
 
         int retorno = JOptionPane.showOptionDialog(null, message, title,
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
@@ -393,6 +392,47 @@ public class SwingUtils
         );
             
         return area;
+    }
+    
+    public static void installDragAndDrop(final JComponent component, 
+    	final TransferHandler handler, final int transferType)
+    {
+    	try
+    	{
+    		ReflectionUtils.invokeMethod("setDragEnabled", component, 
+				new Class[] {Boolean.class}, new Object[] {true});
+    	}
+    	catch (IllegalArgumentException e)
+    	{
+    		throw e;
+    	}
+    	
+    	ReflectionUtils.invokeMethod("setTransferHandler", component, 
+    		new Class[] { TransferHandler.class }, new Object[] { handler });
+    	
+    	MouseInputAdapter starter = new MouseInputAdapter()
+    	{
+    		@Override
+        	public void mousePressed(MouseEvent e)
+        	{
+        		TransferHandler handler = (TransferHandler)
+        			ReflectionUtils.invokeMethod("getTransferHandler", component, 
+    					new Class[] {}, new Object[] {});
+        		handler.exportAsDrag(component, e, transferType);
+        		
+        	}
+    	};
+    	
+    	component.addMouseListener(starter);
+    	component.addMouseMotionListener(starter);
+    }
+    
+    public static void centralize(Component component)
+    {
+        component.setLocation(
+    		Toolkit.getDefaultToolkit().getScreenSize().width / 2 - 
+    		component.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 
+			component.getHeight() / 2);
     }
     
 }
