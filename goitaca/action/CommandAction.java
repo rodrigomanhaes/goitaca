@@ -64,6 +64,11 @@ public class CommandAction extends AbstractAction
         commandListeners = new ArrayList<CommandActionListener>();
 	}
 	
+	public CommandAction(String name, String mnemonic)
+	{
+		this(name, null, null, mnemonic, null);
+	}
+	
 	private boolean enabled = true;
 	private boolean visible = true;
 	private boolean marked = true;
