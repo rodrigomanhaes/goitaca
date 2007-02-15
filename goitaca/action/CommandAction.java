@@ -49,6 +49,7 @@ public class CommandAction extends AbstractAction
 	public CommandAction(String name, URL icon, KeyStroke keyStroke,
 		String mnemonic, String toolTip)
 	{
+		this();
         if (name != null)
             this.putValue(Action.NAME, name);
 		if (icon != null)
