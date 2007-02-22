@@ -26,24 +26,15 @@ public class ObjectTransferable implements Transferable
 	private Object data;
 	private JComponent source;
 	
-	public void setData(Object data)
+	public ObjectTransferable(JComponent source, Object data)
 	{
+		this.source = source;
 		this.data = data;
-	}
-	
-	public Object getData()
-	{
-		return data;
 	}
 	
 	public JComponent getSource()
 	{
 		return source;
-	}
-	
-	public void setSource(JComponent source)
-	{
-		this.source = source;
 	}
 	
 	public Object getTransferData(DataFlavor flavor)
