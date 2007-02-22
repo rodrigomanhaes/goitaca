@@ -311,6 +311,16 @@ public class SwingUtils
 
         return retorno;
     }
+    
+    public static int yesNoPane(String title, String message,
+            Integer botaoDefault, Object... options)
+    {
+        int retorno = JOptionPane.showOptionDialog(null, message, title,
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+            options, options[botaoDefault]);
+
+        return retorno;
+    }
 
     public static Icon adjustSize(ImageIcon icon, double scale)
     {
@@ -400,7 +410,7 @@ public class SwingUtils
     	try
     	{
     		ReflectionUtils.invokeMethod("setDragEnabled", component, 
-				new Class[] {Boolean.class}, new Object[] {true});
+				new Class[] {boolean.class}, new Object[] {true});
     	}
     	catch (IllegalArgumentException e)
     	{
