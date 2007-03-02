@@ -29,7 +29,7 @@ public class DefaultFrame implements FrameAdapter
 	public DefaultFrame(FrameType type) 
 	{
 		this.type = type;
-    	adapter = type.getFrame().newInstance();
+    	adapter = type.newFrame();
 	}
 
 	public void initialize()
@@ -68,6 +68,8 @@ public class DefaultFrame implements FrameAdapter
         adapter.setClosable(true);
         
         Container container = adapter.getContentPane();
+        
+        container.removeAll();
         
         container.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -330,6 +332,11 @@ public class DefaultFrame implements FrameAdapter
 	public FrameAdapter newInstance()
 	{
 		return adapter.newInstance();
+	}
+	
+	public void dispose()
+	{
+		adapter.dispose();
 	}
 
 }

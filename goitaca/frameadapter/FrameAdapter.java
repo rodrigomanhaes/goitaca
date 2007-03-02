@@ -39,6 +39,7 @@ public interface FrameAdapter
 	public void update(Graphics g);
 	public void setResizable(boolean resizable);
 	public boolean isResizable();
+	public void dispose();
 
 	/* Window e JInternalFrame */
 	public void pack();

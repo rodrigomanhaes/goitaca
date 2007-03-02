@@ -9,33 +9,35 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.accessibility.AccessibleContext;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.event.InternalFrameListener;
 
-public class JFrameAdapter implements FrameAdapter 
+public class JDialogAdapter implements FrameAdapter
 {
-	private JFrame frame;
+	private JDialog frame;
 	
 	private boolean closed = true;
 	
-	public JFrameAdapter(JFrame frame)
+	public JDialogAdapter(JDialog frame)
 	{
 		this.frame = frame;
 		frame.addWindowListener(
             new WindowAdapter()
             {
-				public void windowClosed(WindowEvent e)
-				{
-					closed = true;
-				}
-
-				public void windowOpened(WindowEvent e)
-				{
-					closed = false;
-				}
+            	@Override
+                public void windowOpened(WindowEvent e)
+                {
+                    closed = false;
+                }
+                
+            	@Override
+                public void windowClosed(WindowEvent e)
+                {
+                    closed = true;
+                }
             }
         );
 	}
@@ -119,7 +121,7 @@ public class JFrameAdapter implements FrameAdapter
 	{
 		return closed;
 	}
-
+	
 	public int getHeight()
 	{
 		return frame.getHeight();
@@ -170,7 +172,7 @@ public class JFrameAdapter implements FrameAdapter
 	{
 		frame.setTitle(title);
 	}
-
+	
 	public boolean isResizable()
 	{
 		return frame.isResizable();
@@ -180,17 +182,17 @@ public class JFrameAdapter implements FrameAdapter
 	{
 		frame.setResizable(resizable);
 	}
-
+	
 	public Container getParent()
 	{
 		return frame.getParent();
 	}
-
+	
 	public String getTitle()
 	{
 		return frame.getTitle();
 	}
-
+	
 	public Container getFrame()
 	{
 		return frame;
@@ -205,15 +207,15 @@ public class JFrameAdapter implements FrameAdapter
 	{
 		throw new IllegalArgumentException("Este objeto não se refere a um JInternalFrame");
 	}
-
+	
 	public FrameAdapter newInstance()
 	{
-		return new JFrameAdapter(new JFrame());
+		return new JDialogAdapter(new JDialog());
 	}
 	
 	public void dispose()
 	{
 		frame.dispose();
 	}
-	
+
 }

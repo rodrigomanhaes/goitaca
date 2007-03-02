@@ -25,6 +25,7 @@ public class JInternalFrameAdapter implements FrameAdapter
 	public JInternalFrameAdapter(JInternalFrame frame)
 	{
 		this.frame = frame;
+		frame.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		frame.addInternalFrameListener(
             new InternalFrameAdapter()
             {
@@ -216,6 +217,11 @@ public class JInternalFrameAdapter implements FrameAdapter
 	public FrameAdapter newInstance()
 	{
 		return new JInternalFrameAdapter(new JInternalFrame());
+	}
+	
+	public void dispose()
+	{
+		frame.dispose();
 	}
 	
 }
