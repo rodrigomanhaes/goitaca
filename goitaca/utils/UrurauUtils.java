@@ -116,12 +116,18 @@ public class UrurauUtils
 	public static <BO> void sortListByAttribute(List<BO> list, String attribute, boolean revert)
     {
     	Map<Object, List<BO>> map = new TreeMap<Object, List<BO>>(new StringComparator());
+    	List<BO> nullList = new ArrayList<BO>();
     	
     	try
     	{
     		for (BO bo: list)
     		{
-    			Object value = ReflectionUtils.getProperty(bo, attribute); 
+    			Object value = ReflectionUtils.getProperty(bo, attribute);
+    			if (value == null)
+    			{
+    				nullList.add(bo);
+    				continue;
+    			}
     			if (!map.containsKey(value))
     			{
 	    			List<BO> lista = new ArrayList<BO>();
@@ -141,6 +147,7 @@ public class UrurauUtils
     	for (Object obj: map.keySet())
     		for (BO bo: map.get(obj))
     			list.add(bo);
+    	list.addAll(nullList);
     	
     	if (revert)
     		Collections.reverse(list);
