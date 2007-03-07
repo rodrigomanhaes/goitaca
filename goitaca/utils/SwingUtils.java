@@ -80,7 +80,10 @@ public class SwingUtils
         int labelWidth, int textFieldWidth, int gridHeight, int fill,
         double weightx, double weighty, Insets insets)
     {
-        gbc.gridx = gridx;
+    	if (label instanceof JLabel)
+    		((JLabel) label).setLabelFor(textField);
+    	
+    	gbc.gridx = gridx;
         gbc.gridy = gridy;
         gbc.gridwidth = labelWidth;
         gbc.gridheight = gridHeight;
