@@ -16,10 +16,23 @@ public class ComboBoxFactory
         return getYesNoComboBox(-1);
     }
     
+    public static JComboBox getPrototypedCombo(int space)
+    {
+        StringBuilder string = new StringBuilder();
+        for (int i = 0 ; i < space ; i++)
+            string.append("M");
+        
+        JComboBox prototypedCombo = new JComboBox();
+        prototypedCombo.setPrototypeDisplayValue(string);        
+        
+        return prototypedCombo;
+    }
+    
     public static JComboBox getGenderCombo(int selectedIndex)
     {
         JComboBox combo = new JComboBox(new Object[] { "Masculino", "Feminino" });
         combo.setSelectedIndex(selectedIndex);
+        combo.setPrototypeDisplayValue("Masculino");
         return combo;
     }
     
