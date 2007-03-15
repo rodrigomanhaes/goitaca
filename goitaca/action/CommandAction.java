@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -24,11 +26,11 @@ public class CommandAction extends AbstractAction
 {
 	private static final long serialVersionUID = 676182495685424116L;
 
-	private List<ActionListener> listeners; 
+	private Set<ActionListener> listeners; 
 	
 	public CommandAction()
 	{
-		listeners = new ArrayList<ActionListener>();
+		listeners = new HashSet<ActionListener>();
 	}
 	
 	public CommandAction addActionListener(ActionListener listener)

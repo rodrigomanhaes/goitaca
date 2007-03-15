@@ -205,7 +205,6 @@ public class FormattedTextFactory
     
     public static JFormattedTextField getMaskedField(String sMask)
     {
-        
         MaskFormatter mask = getMaskFormatter(sMask);
         mask.setPlaceholderCharacter('_');
         JFormattedTextField field = new JFormattedTextField(mask);
