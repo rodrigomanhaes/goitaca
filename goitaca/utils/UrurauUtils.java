@@ -109,7 +109,7 @@ public class UrurauUtils
     
     public static <T> void sortListByAttribute(List<T> list, String attribute)
     {
-        sortListByAttribute(list, attribute, true);
+        sortListByAttribute(list, attribute, false);
     }
     
 	@SuppressWarnings("unchecked")
@@ -156,5 +156,17 @@ public class UrurauUtils
     public static <T> T notNull(T t, T _default)
     {
     	return t != null ? t : _default;
+    }
+    
+    public static String separate(String separator, String... items)
+    {
+    	StringBuilder s = new StringBuilder();
+    	for (String item: items)
+    	{
+    		if (s.length() > 0)
+    			s.append(separator);
+    		s.append(item);
+    	}
+    	return s.toString();
     }
 }

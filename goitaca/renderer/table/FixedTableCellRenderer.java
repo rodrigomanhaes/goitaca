@@ -49,7 +49,4 @@ public class FixedTableCellRenderer extends TableCellRendererDecorator
 		
 		return component;
 	}
-	
-	
-
 }

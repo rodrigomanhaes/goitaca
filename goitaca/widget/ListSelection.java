@@ -3,26 +3,24 @@ package goitaca.widget;
 import static java.awt.GridBagConstraints.CENTER;
 import static java.awt.GridBagConstraints.NONE;
 import goitaca.resources.GoitacaResourceBox;
-import goitaca.utils.ReflectionUtils;
 import goitaca.utils.SwingUtils;
-import goitaca.utils.UrurauUtils;
 
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 public class ListSelection extends JPanel
 {
@@ -35,6 +33,11 @@ public class ListSelection extends JPanel
 	private JButton oneToTarget;
 	private JButton allToTarget;
 	
+	private JScrollPane sourceScroll;
+	
+	private String attribute;
+	private boolean sorted;
+	
 	public ListSelection(String attribute, boolean sorted)
 	{
 		this(null, attribute, sorted);
@@ -45,11 +48,11 @@ public class ListSelection extends JPanel
 		super();
 		if (title != null)
 			this.setBorder(BorderFactory.createTitledBorder(title));
-		source.setModel(new SelectionListModel(null, attribute, sorted));
-		target.setModel(new SelectionListModel(null, attribute, sorted));
+		this.attribute = attribute;
+		this.sorted = sorted;
 	}
 	
-	public Object initialize()
+	public ListSelection initialize()
 	{
 		this.init();
 		this.build();
@@ -58,13 +61,18 @@ public class ListSelection extends JPanel
 	
 	public void addObject(Object object, int index)
 	{
-		((SelectionListModel) source.getModel()).add(object, index);
+		((IndividualListSelectionModel) source.getModel()).add(object, index);
+	}
+	
+	public void addObject(Object object)
+	{
+		((IndividualListSelectionModel) source.getModel()).add(object);
 	}
 	
 	public void clear()
 	{
-		((SelectionListModel) source.getModel()).removeAll();
-		((SelectionListModel) target.getModel()).removeAll();
+		((IndividualListSelectionModel) source.getModel()).removeAll();
+		((IndividualListSelectionModel) target.getModel()).removeAll();
 	}
 	
 	protected void init()
@@ -73,6 +81,61 @@ public class ListSelection extends JPanel
 		source.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		target = new JList();
 		target.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
+		source.setModel(new IndividualListSelectionModel(null, attribute, sorted));
+		target.setModel(new IndividualListSelectionModel(null, attribute, sorted));
+		
+		final IndividualListSelectionModel sourceModel = 
+			(IndividualListSelectionModel) source.getModel();
+		final IndividualListSelectionModel targetModel = 
+			(IndividualListSelectionModel) target.getModel();
+		
+		sourceModel.addListDataListener(
+			new ListDataListener()
+			{
+				public void contentsChanged(ListDataEvent arg0) 
+				{
+				}
+
+				public void intervalAdded(ListDataEvent e) 
+				{
+					List<Object> sourceObjects = sourceModel.getAll();
+					List<Object> targetObjects = targetModel.getAll();
+					
+					for (Object sobj: sourceObjects)
+						if (targetObjects.contains(sobj))
+							targetModel.remove(sobj);
+				}
+
+				public void intervalRemoved(ListDataEvent arg0) 
+				{
+				}
+				
+			}
+		);
+		
+		targetModel.addListDataListener(
+			new ListDataListener()
+			{
+				public void contentsChanged(ListDataEvent arg0) 
+				{
+				}
+
+				public void intervalAdded(ListDataEvent e) 
+				{
+					List<Object> sourceObjects = sourceModel.getAll();
+					List<Object> targetObjects = targetModel.getAll();
+					
+					for (Object tobj: targetObjects)
+						if (sourceObjects.contains(tobj))
+							sourceModel.remove(tobj);
+				}
+
+				public void intervalRemoved(ListDataEvent arg0) 
+				{
+				}
+			}
+		);
 		
 		oneToSource = new JButton(new ImageIcon(
 			this.getClass().getClassLoader().getResource(GoitacaResourceBox.getPrevIcon())));
@@ -135,19 +198,18 @@ public class ListSelection extends JPanel
 		SwingUtils.addGridBagComponent(panel, oneToSource, 0, 2, 1, 1, CENTER, NONE);
 		SwingUtils.addGridBagComponent(panel, allToSource, 0, 3, 1, 1, CENTER, NONE, new Insets(2, 3, 2, 3));
 		
-		SwingUtils.addGridBagComponent(this, 
-			SwingUtils.scrollComponent(source, 120, 150), 
+		sourceScroll = SwingUtils.scrollComponent(source, 120, 150);
+		SwingUtils.addGridBagComponent(this, sourceScroll,
 			0, 0, 1, 1, CENTER, NONE, new Insets(2, 5, 5, 5));
 
 		SwingUtils.addGridBagComponent(this, panel, 1, 0, 1, 1, CENTER, NONE);
 		
-		SwingUtils.addGridBagComponent(this, 
-			SwingUtils.scrollComponent(target, 120, 150), 
+		SwingUtils.addGridBagComponent(this, SwingUtils.scrollComponent(target, 120, 150), 
 			2, 0, 1, 1, CENTER, NONE);
 		
 	}
 	
-	private void moveOne(SelectionListModel sourceModel, SelectionListModel targetModel, JList source)
+	private void moveOne(IndividualListSelectionModel sourceModel, IndividualListSelectionModel targetModel, JList source)
 	{
 		int[] indices = source.getSelectedIndices();
 		if (indices.length == 0)
@@ -160,7 +222,7 @@ public class ListSelection extends JPanel
 		}
 	}
 	
-	private void moveAll(SelectionListModel sourceModel, SelectionListModel targetModel)
+	private void moveAll(IndividualListSelectionModel sourceModel, IndividualListSelectionModel targetModel)
 	{
 		if (sourceModel.getSize() == 0)
 			return;
@@ -175,122 +237,75 @@ public class ListSelection extends JPanel
 	
 	private void oneToSource()
 	{
-		SelectionListModel targetModel = (SelectionListModel) target.getModel(); 
-		SelectionListModel sourceModel = (SelectionListModel) source.getModel();
+		IndividualListSelectionModel targetModel = (IndividualListSelectionModel) target.getModel(); 
+		IndividualListSelectionModel sourceModel = (IndividualListSelectionModel) source.getModel();
 		moveOne(targetModel, sourceModel, target);
 	}
 	
 	private void allToSource()
 	{
-		SelectionListModel targetModel = (SelectionListModel) target.getModel(); 
-		SelectionListModel sourceModel = (SelectionListModel) source.getModel();
+		IndividualListSelectionModel targetModel = (IndividualListSelectionModel) target.getModel(); 
+		IndividualListSelectionModel sourceModel = (IndividualListSelectionModel) source.getModel();
 		moveAll(targetModel, sourceModel);
 	}
 	
 	private void oneToTarget()
 	{
-		SelectionListModel targetModel = (SelectionListModel) target.getModel(); 
-		SelectionListModel sourceModel = (SelectionListModel) source.getModel();
+		IndividualListSelectionModel targetModel = (IndividualListSelectionModel) target.getModel(); 
+		IndividualListSelectionModel sourceModel = (IndividualListSelectionModel) source.getModel();
 		moveOne(sourceModel, targetModel, source);
 	}
 	
 	private void allToTarget()
 	{
-		SelectionListModel targetModel = (SelectionListModel) target.getModel(); 
-		SelectionListModel sourceModel = (SelectionListModel) source.getModel();
+		IndividualListSelectionModel targetModel = (IndividualListSelectionModel) target.getModel(); 
+		IndividualListSelectionModel sourceModel = (IndividualListSelectionModel) source.getModel();
 		moveAll(sourceModel, targetModel);
 	}
-
-}
-
-@SuppressWarnings("serial")
-class SelectionListModel extends AbstractListModel
-{
-	private List<Object> objects;
-	private String attribute;
 	
-	private boolean sorted;
-	
-	public SelectionListModel(List<Object> objects, String attribute, boolean sorted)
+	public void select(Object item)
 	{
-		this.objects = objects == null ? new ArrayList<Object>() : objects;
-		this.attribute = attribute;
-		this.sorted = sorted;
-	}
-
-	public Object getElementAt(int index)
-	{
-		return this.getValue(objects.get(index), attribute);
+		IndividualListSelectionModel targetModel = (IndividualListSelectionModel) target.getModel(); 
+		IndividualListSelectionModel sourceModel = (IndividualListSelectionModel) source.getModel();
+		
+		if (!sourceModel.contains(item))
+			return;
+		
+		sourceModel.remove(item);
+		targetModel.add(item);
 	}
 	
-	public Object getObjectAt(int index)
+	public IndividualListSelectionModel getSourceModel()
 	{
-		return this.objects.get(index);
+		return (IndividualListSelectionModel) source.getModel();
 	}
 	
-	public List<Object> getAll()
+	public IndividualListSelectionModel getTargetModel()
 	{
-		return Collections.unmodifiableList(this.objects);
+		return (IndividualListSelectionModel) target.getModel();
 	}
 	
-	public void remove(Object object)
+	/* Component */
+	public void setBackgroundColor(Color color)
 	{
-		int index = this.objects.indexOf(object); 
-		if (index != -1)
-			this.remove(index);
+		source.setBackground(color);
+		target.setBackground(color);
 	}
 	
-
-	public int getSize()
+	public void setReadOnly(boolean readOnly)
 	{
-		return objects.size();
+		oneToSource.setEnabled(!readOnly);
+		allToSource.setEnabled(!readOnly);
+		oneToTarget.setEnabled(!readOnly);
+		allToTarget.setEnabled(!readOnly);
 	}
 	
-	private Object getValue(Object object, String attribute)
+	public void showOnlyTarget(boolean show)
 	{
-		try
-		{
-			return ReflectionUtils.getProperty(object, attribute);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace(System.err);
-			return null;
-		}
+		oneToSource.setVisible(!show);
+		allToSource.setVisible(!show);
+		oneToTarget.setVisible(!show);
+		allToTarget.setVisible(!show);
+		sourceScroll.setVisible(!show);
 	}
-	
-	public void remove(int index)
-	{
-		this.objects.remove(index);
-		this.fireIntervalRemoved(this, index, index);
-	}
-	
-	public void add(Object object, int index)
-	{
-		this.objects.add(index, object);
-		this.fireIntervalAdded(this, index, index);
-		if (sorted)
-		{
-			UrurauUtils.sortListByAttribute(objects, attribute);
-			this.fireContentsChanged(this, 0, objects.size() - 1);
-		}
-	}
-	
-	public void add(Object object)
-	{
-		this.add(object, this.getSize());
-	}
-	
-	public void add(Collection<Object> items)
-	{
-		for (Object o: items)
-			this.add(o);
-	}
-	
-	public void removeAll()
-	{
-		this.objects.clear();
-		this.fireIntervalRemoved(this, 0, objects.size() -1);
-	}
-
 }
