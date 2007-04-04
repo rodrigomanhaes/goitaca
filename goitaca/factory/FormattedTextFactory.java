@@ -11,6 +11,7 @@ import goitaca.format.MuteFormattedTextField;
 import goitaca.format.NumberVerifier;
 import goitaca.format.OptionPaneOutputCommand;
 import goitaca.format.OutputCommand;
+import goitaca.format.TimeVerifier;
 import goitaca.format.UpperVerifier;
 
 import java.text.DecimalFormat;
@@ -109,7 +110,6 @@ public class FormattedTextFactory
     
     public static JFormattedTextField getCNPJField(OutputCommand output)
     {
-        
         MaskFormatter mask = getMaskFormatter("##.###.###/####-##");
         mask.setValueContainsLiteralCharacters(false);
         mask.setPlaceholderCharacter('_');
@@ -118,6 +118,18 @@ public class FormattedTextFactory
         JFormattedTextField field = new JFormattedTextField(mask);
         field.setInputVerifier(verifier);
         return field;
+    }
+    
+    public static JFormattedTextField getTimeField()
+    {
+    	MaskFormatter mask = getMaskFormatter("##:##");
+    	mask.setValueContainsLiteralCharacters(false);
+    	mask.setPlaceholderCharacter('_');
+    	TimeVerifier verifier = new TimeVerifier();
+    	JFormattedTextField field = new JFormattedTextField(mask);
+    	field.setInputVerifier(verifier);
+    	return field;
+    	
     }
     
     public static JTextField getUpperField(int columns)
