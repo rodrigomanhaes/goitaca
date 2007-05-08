@@ -97,6 +97,7 @@ public class FormattedTextFactory
         CPFVerifier verifier = new CPFVerifier();
         verifier.setOutput(output);
         JFormattedTextField field = new JFormattedTextField(mask);
+        field.setFocusLostBehavior(JFormattedTextField.COMMIT);
         field.setInputVerifier(verifier);
         return field;
     }
