@@ -23,7 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.TransferHandler;
-import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
 public class SwingUtils
@@ -360,14 +359,6 @@ public class SwingUtils
     
     public static void testComponentDialog(Component component, boolean exit)
     {
-    	try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e)
-        {
-        }
-    	
     	JDialog dialog = new JDialog();
     	dialog.setModal(true);
     	dialog.getContentPane().add(component);

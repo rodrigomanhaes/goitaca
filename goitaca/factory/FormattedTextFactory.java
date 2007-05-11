@@ -243,5 +243,5 @@ class JFormattedTextField extends MuteFormattedTextField
     {
         super();
     }
-    
+ 
 }
