@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jardesc>
-<jar path="C:/Java/jboss-4.0.5.GA/server/default/lib/goitaca.jar"/>
+<jar path="/home/rodrigo/desenvolvimento/software/jboss-4.0.5.GA/server/default/lib/goitaca.jar"/>
 <options buildIfNeeded="true" compress="true" descriptionLocation="/Goitacá/Goitaca.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
 <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
 <selectedProjects/>
@@ -11,6 +11,26 @@
 </sealing>
 </manifest>
 <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-<javaElement handleIdentifier="=Goitacá"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.dnd"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.frameadapter"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.factory"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.widget.table.span"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.renderer.list"/>
+<file path="/Goitacá/.classpath"/>
+<file path="/Goitacá/Goitaca.jardesc"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.action"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.event"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.model"/>
+<file path="/Goitacá/.project"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.dnd.event"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.widget"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.utils"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.report"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.resources.images"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.resources"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.validation"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.format"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.report.jasper"/>
+<javaElement handleIdentifier="=Goitacá/&lt;goitaca.renderer.table"/>
 </selectedElements>
 </jardesc>

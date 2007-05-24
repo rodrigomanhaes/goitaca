@@ -31,7 +31,7 @@ public class TimeVerifier extends VerifierDecorator
     {
     	String data = ((JTextComponent) input).getText();
     	
-    	String s = placeHolder + placeHolder + ":" + placeHolder + placeHolder;
+    	String s = ""+ placeHolder + placeHolder + ":" + placeHolder + placeHolder;
     	
     	if ("".equals(data) || s.equals(data))
     		return super.verify(input);
@@ -67,5 +67,16 @@ public class TimeVerifier extends VerifierDecorator
     		return hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60;
     	}
     	return false;
+    }
+    
+    public static String mask(String horario)
+    {
+    	return new StringBuilder()
+    		.append(horario.charAt(0))
+    		.append(horario.charAt(1))
+    		.append(":")
+    		.append(horario.charAt(2))
+    		.append(horario.charAt(3))
+    		.toString();
     }
 }

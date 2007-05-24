@@ -126,7 +126,10 @@ public class FormattedTextFactory
     	MaskFormatter mask = getMaskFormatter("##:##");
     	mask.setValueContainsLiteralCharacters(false);
     	mask.setPlaceholderCharacter('_');
+    	OptionPaneOutputCommand command = new OptionPaneOutputCommand();
+        command.setMessage("Hora inválida!");
     	TimeVerifier verifier = new TimeVerifier();
+    	verifier.setOutput(command);
     	JFormattedTextField field = new JFormattedTextField(mask);
     	field.setInputVerifier(verifier);
     	return field;
